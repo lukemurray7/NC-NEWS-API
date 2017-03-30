@@ -80,7 +80,38 @@ function addComment(request, response) {
     });
 }
 
+function deleteComment (request, response) {
+    commentsModel.remove({
+        _id: request.params.comment_id
+    }, function (error, comment) {
+        if (error) {
+            return response.status(500).send({error});
+        }
+        response.status(200).send({remove: "success"})
+    })
+}
 
+function voteArticle (request, response) {
+    var query = request.query.vote;
+    if (query === "up") {
+        newVote = {
+            $inc: {votes: 1}
+        };
+    }
+    if (query === "down") {
+        newVote = {
+            $inc: {votes: -1}
+        };
+    }
+    articlesModel.update({
+        _id: request.params.article_id 
+    }, newVote, function (error, article, next) {
+        if (error) {
+            return response.status(500).send({error});
+        }
+        response.status(200).send({updated: article})
+    })
+}
 
 module.exports = {
     getTopics,
@@ -89,5 +120,7 @@ module.exports = {
     getComments,
     getAllUsers,
     getUser,
-    addComment
+    addComment,
+    deleteComment,
+    voteArticle
 }

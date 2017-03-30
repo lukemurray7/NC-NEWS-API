@@ -20,4 +20,8 @@ router.route('/users/:username').get(controllers.getUser);
 
 router.route('/articles/:article_id/comments').post(controllers.addComment);
 
+router.route('/comments/:comment_id').delete(controllers.deleteComment);
+
+router.route('/articles/:article_id').put(controllers.voteArticle);
+
 module.exports = router;
