@@ -21,9 +21,23 @@ app.use(bodyParser.json());
 app.use('/api', apiRouter);
 
 app.use('/*', function (request, response) {
-  response.status(404).send({reason: 'ROUTE NOT FOUND'});
+  response.status(404).send({ reason: 'ROUTE NOT FOUND' });
 })
 
 app.listen(PORT, function () {
   console.log(`listening on port ${PORT}`);
+});
+
+app.use(function (error, request, response, next) {
+  if (error.name === 'CastError') {
+    return response.status(400).send({
+      reason: `No id ${error.value} found`,
+      stack_trace: error
+    })
+  }
+  return next(error);
+});
+
+app.use(function (error, request, response) {
+  return response.status(500).send({ error});
 });
