@@ -18,4 +18,6 @@ router.route('/users').get(controllers.getAllUsers);
 
 router.route('/users/:username').get(controllers.getUser);
 
+router.route('/articles/:article_id/comments').post(controllers.addComment);
+
 module.exports = router;

@@ -2,6 +2,7 @@ const topicsModel = require('../models/topics');
 const articlesModel = require('../models/articles');
 const commentsModel = require('../models/comments');
 const usersModel = require('../models/users');
+const async = require('async');
 
 function getTopics(request, response) {
     topicsModel.find({}, function (error, topics) {
@@ -64,11 +65,29 @@ function getUser(request, response) {
     })
 }
 
+function addComment(request, response) {
+    var newComment = {
+        belongs_to: request.params.article_id,
+        body: request.body.comment,
+        created_by: "Northcoders",
+        votes: 0,
+    };
+    commentsModel.create([newComment], function (error, comment, next) {
+        if (error) {
+            return response.status(500).send({ error });
+        }
+        response.status(200).send({ comment });
+    });
+}
+
+
+
 module.exports = {
     getTopics,
     getArticles,
     getTopicArticles,
     getComments,
     getAllUsers,
-    getUser
+    getUser,
+    addComment
 }
