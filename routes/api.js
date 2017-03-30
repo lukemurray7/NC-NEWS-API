@@ -12,4 +12,10 @@ router.route('/topics/:topic_name/articles').get(controllers.getTopicArticles);
 
 router.route('/articles').get(controllers.getArticles);
 
+router.route('/articles/:article_id/comments').get(controllers.getComments);
+
+router.route('/users').get(controllers.getAllUsers);
+
+router.route('/users/:username').get(controllers.getUser);
+
 module.exports = router;
