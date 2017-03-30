@@ -113,6 +113,28 @@ function voteArticle (request, response) {
     })
 }
 
+function voteComment (request, response) {
+    var query = request.query.vote;
+    if (query === "up") {
+        newVote = {
+            $inc: {votes: 1}
+        };
+    }
+    if (query === "down") {
+        newVote = {
+            $inc: {votes: -1}
+        };
+    }
+    commentsModel.update({
+        _id: request.params.comment_id 
+    }, newVote, function (error, comment, next) {
+        if (error) {
+            return response.status(500).send({error});
+        }
+        response.status(200).send({updated: comment})
+    })    
+}
+
 module.exports = {
     getTopics,
     getArticles,
@@ -122,5 +144,6 @@ module.exports = {
     getUser,
     addComment,
     deleteComment,
-    voteArticle
+    voteArticle,
+    voteComment
 }

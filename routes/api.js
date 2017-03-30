@@ -24,4 +24,6 @@ router.route('/comments/:comment_id').delete(controllers.deleteComment);
 
 router.route('/articles/:article_id').put(controllers.voteArticle);
 
+router.route('/comments/:comment_id').put(controllers.voteComment);
+
 module.exports = router;
