@@ -4,19 +4,17 @@ const commentsModel = require('../models/comments');
 const usersModel = require('../models/users');
 const async = require('async');
 
-function getTopics(request, response) {
+function getTopics (request, response) {
     topicsModel.find({}, function (error, topics) {
         if (error) {
-            return response.status(500).send({ error: error });
+            return response.status(500).send({error: error});
         }
-        response.status(200).send({ topics });
-    })
+        response.status(200).send({topics});
+    });
 
 }
 
-function getArticles(request, response) {
-    // get all the articles
-    // map over them and add a comment count
+function getArticles (request, response) {
 
     async.waterfall([
         function (next) {
@@ -51,132 +49,123 @@ function getArticles(request, response) {
     ],
         function (error, results) {
             if (error) {
-                return response.status(500).send({ error: error });
+                return response.status(500).send({error: error});
             }
-            response.status(200).send({ results });
-        })
+            response.status(200).send({results});
+        });
 
-
-
-
-    // articlesModel.find({}, function (error, articles) {
-    //     if (error) {
-    //         return response.status(500).send({ error: error });
-    //     }
-    //     response.status(200).send({ articles });
-    // })
 }
 
-function getTopicArticles(request, response, next) {
+function getTopicArticles (request, response, next) {
     articlesModel.find({
         belongs_to: request.params.topic_name
     }, function (error, articles) {
         if (error) {
             return next(error);
         }
-        response.status(200).send({ articles });
-    })
+        response.status(200).send({articles});
+    });
 }
 
-function getComments(request, response) {
+function getComments (request, response) {
     commentsModel.find({
         belongs_to: request.params.article_id
     }, function (error, comments) {
         if (error) {
-            return response.status(500).send({ error });
+            return response.status(500).send({error});
         }
-        response.status(200).send({ comments });
+        response.status(200).send({comments});
     });
 }
 
-function getAllUsers(request, response) {
+function getAllUsers (request, response) {
     usersModel.find({}, function (error, users) {
         if (error) {
-            return response.status(500).send({ error });
+            return response.status(500).send({error});
         }
-        response.status(200).send({ users });
-    })
+        response.status(200).send({users});
+    });
 }
 
-function getUser(request, response) {
+function getUser (request, response) {
     usersModel.find({
         username: request.params.username
     }, function (error, user) {
         if (error) {
-            return response.status(500).send({ error });
+            return response.status(500).send({error});
         }
-        response.status(200).send({ user })
-    })
+        response.status(200).send({user});
+    });
 }
 
-function addComment(request, response) {
+function addComment (request, response) {
     var newComment = {
         belongs_to: request.params.article_id,
         body: request.body.comment,
-        created_by: "Northcoders",
+        created_by: 'northcoder',
         votes: 0,
     };
     commentsModel.create([newComment], function (error, comment, next) {
         if (error) {
-            return response.status(500).send({ error });
+            return response.status(500).send({error});
         }
-        response.status(200).send({ comment });
+        response.status(200).send({comment});
     });
 }
 
-function deleteComment(request, response) {
+function deleteComment (request, response) {
     commentsModel.remove({
         _id: request.params.comment_id
     }, function (error, comment) {
         if (error) {
-            return response.status(500).send({ error });
+            return response.status(500).send({error});
         }
-        response.status(200).send({ remove: "success" })
-    })
+        response.status(200).send({remove: 'success'});
+    });
 }
 
-function voteArticle(request, response) {
+function voteArticle (request, response) {
     var query = request.query.vote;
-    if (query === "up") {
+    if (query === 'up') {
         newVote = {
-            $inc: { votes: 1 }
+            $inc: {votes: 1}
         };
     }
-    if (query === "down") {
+    if (query === 'down') {
         newVote = {
-            $inc: { votes: -1 }
+            $inc: {votes: -1}
         };
     }
     articlesModel.update({
         _id: request.params.article_id
     }, newVote, function (error, article, next) {
         if (error) {
-            return response.status(500).send({ error });
+            return response.status(500).send({error});
         }
-        response.status(200).send({ updated: article })
-    })
+        response.status(200).send({updated: article});
+    });
 }
 
-function voteComment(request, response) {
+function voteComment (request, response) {
     var query = request.query.vote;
-    if (query === "up") {
+    if (query === 'up') {
         newVote = {
-            $inc: { votes: 1 }
+            $inc: {votes: 1}
         };
     }
-    if (query === "down") {
+    if (query === 'down') {
         newVote = {
-            $inc: { votes: -1 }
+            $inc: {votes: -1}
         };
     }
     commentsModel.update({
         _id: request.params.comment_id
     }, newVote, function (error, comment, next) {
         if (error) {
-            return response.status(500).send({ error });
+            return response.status(500).send({error});
         }
-        response.status(200).send({ updated: comment })
-    })
+        response.status(200).send({updated: comment});
+    });
 }
 
 module.exports = {
@@ -190,4 +179,4 @@ module.exports = {
     deleteComment,
     voteArticle,
     voteComment
-}
+};
