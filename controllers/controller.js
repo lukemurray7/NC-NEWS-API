@@ -15,12 +15,56 @@ function getTopics(request, response) {
 }
 
 function getArticles(request, response) {
-    articlesModel.find({}, function (error, articles) {
-        if (error) {
-            return response.status(500).send({ error: error });
+    // get all the articles
+    // map over them and add a comment count
+
+    async.waterfall([
+        function (next) {
+            articlesModel.find({}, function (error, articles) {
+                if (error) {
+                    return next(error);
+                }
+                next(null, articles);
+            });
+        },
+        function (articles, next) {
+
+            async.mapSeries(articles, function (article, done) {
+                commentsModel.find({
+                    belongs_to: article._id
+                }, function (error, comments) {
+                    if (error) {
+                        return done(error);
+                    }
+                    article = article.toObject();
+                    article.comments = comments.length;
+                    done(null, article);
+                });
+            }, function (error, results) {
+                if (error) return next(error);
+                next(null, results);
+            });
+
         }
-        response.status(200).send({ articles });
-    })
+
+
+    ],
+        function (error, results) {
+            if (error) {
+                return response.status(500).send({ error: error });
+            }
+            response.status(200).send({ results });
+        })
+
+
+
+
+    // articlesModel.find({}, function (error, articles) {
+    //     if (error) {
+    //         return response.status(500).send({ error: error });
+    //     }
+    //     response.status(200).send({ articles });
+    // })
 }
 
 function getTopicArticles(request, response, next) {
@@ -80,59 +124,59 @@ function addComment(request, response) {
     });
 }
 
-function deleteComment (request, response) {
+function deleteComment(request, response) {
     commentsModel.remove({
         _id: request.params.comment_id
     }, function (error, comment) {
         if (error) {
-            return response.status(500).send({error});
+            return response.status(500).send({ error });
         }
-        response.status(200).send({remove: "success"})
+        response.status(200).send({ remove: "success" })
     })
 }
 
-function voteArticle (request, response) {
+function voteArticle(request, response) {
     var query = request.query.vote;
     if (query === "up") {
         newVote = {
-            $inc: {votes: 1}
+            $inc: { votes: 1 }
         };
     }
     if (query === "down") {
         newVote = {
-            $inc: {votes: -1}
+            $inc: { votes: -1 }
         };
     }
     articlesModel.update({
-        _id: request.params.article_id 
+        _id: request.params.article_id
     }, newVote, function (error, article, next) {
         if (error) {
-            return response.status(500).send({error});
+            return response.status(500).send({ error });
         }
-        response.status(200).send({updated: article})
+        response.status(200).send({ updated: article })
     })
 }
 
-function voteComment (request, response) {
+function voteComment(request, response) {
     var query = request.query.vote;
     if (query === "up") {
         newVote = {
-            $inc: {votes: 1}
+            $inc: { votes: 1 }
         };
     }
     if (query === "down") {
         newVote = {
-            $inc: {votes: -1}
+            $inc: { votes: -1 }
         };
     }
     commentsModel.update({
-        _id: request.params.comment_id 
+        _id: request.params.comment_id
     }, newVote, function (error, comment, next) {
         if (error) {
-            return response.status(500).send({error});
+            return response.status(500).send({ error });
         }
-        response.status(200).send({updated: comment})
-    })    
+        response.status(200).send({ updated: comment })
+    })
 }
 
 module.exports = {
