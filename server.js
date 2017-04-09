@@ -21,7 +21,7 @@ mongoose.connect(db, function (err) {
 
 
 
-
+app.use(cors());
 app.use(bodyParser.json());
 app.use('/api', apiRouter);
 
@@ -49,10 +49,4 @@ app.use(function (error, request, response, next) {
 
 app.use(function (error, request, response) {
   return response.status(500).send({error});
-});
-
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
 });

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const controllers = require('../controllers/controller');
+const cors = require('cors');
 
 router.route('/').get(function (request, response) {
     response.status(200).send({status: 'OK'});
@@ -9,7 +10,7 @@ router.route('/').get(function (request, response) {
 // can seperate all the different routes into different route files, ie:
 
 // topics routes
-router.route('/topics').get(controllers.getTopics);
+router.route('/topics').get(cors(), controllers.getTopics);
 
 router.route('/topics/:topic_name/articles').get(controllers.getTopicArticles);
 
