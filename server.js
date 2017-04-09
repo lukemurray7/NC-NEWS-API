@@ -18,11 +18,7 @@ mongoose.connect(db, function (err) {
   }
 });
 // can put all the middleware in a seperate file
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+
 
 
 
@@ -53,4 +49,10 @@ app.use(function (error, request, response, next) {
 
 app.use(function (error, request, response) {
   return response.status(500).send({error});
+});
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
 });
