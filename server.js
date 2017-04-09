@@ -8,6 +8,7 @@ var config = require('./config');
 var db = 'mongodb://lukem:q1w2e3r4t5@ds157380.mlab.com:57380/nc_news_api';
 var PORT = config.PORT[process.env.NODE_ENV] || process.env.PORT;
 var apiRouter = require('./routes/api');
+var cors = require('cors');
 
 mongoose.connect(db, function (err) {
   if (!err) {
@@ -17,6 +18,7 @@ mongoose.connect(db, function (err) {
   }
 });
 // can put all the middleware in a seperate file
+app.use(cors());
 app.use(bodyParser.json());
 app.use('/api', apiRouter);
 
