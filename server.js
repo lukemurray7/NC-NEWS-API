@@ -9,7 +9,7 @@ var db = config.DB[process.env.NODE_ENV] || process.env.DB;
 var PORT = config.PORT[process.env.NODE_ENV] || process.env.PORT;
 var apiRouter = require('./routes/api');
 
-mongoose.connect(db, function (err) {
+mongoose.connect('mongodb://lukem:q1w2e3r4t5@ds157380.mlab.com:57380/nc_news_api', function (err) {
   if (!err) {
     console.log(`connected to the Database: ${db}`);
   } else {
