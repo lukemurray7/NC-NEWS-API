@@ -56,6 +56,12 @@ function getArticles (request, response) {
 
 }
 
+// *****************************************
+
+// need to include getArticleByID controller
+
+// *****************************************
+
 function getTopicArticles (request, response, next) {
     articlesModel.find({
         belongs_to: request.params.topic_name
@@ -74,6 +80,7 @@ function getComments (request, response) {
         if (error) {
             return response.status(500).send({error});
         }
+        // if (comments.length) response.status(204).send({reason: 'NO CONTENT FOUND, CHECK URL'});
         response.status(200).send({comments});
     });
 }
@@ -114,6 +121,9 @@ function addComment (request, response) {
 }
 
 function deleteComment (request, response) {
+
+    // need to add in a check if the user is northcoders, currently can only delete commments by northcoders, but if a comment is deleted by someone else its a sucess, should be error.
+
     commentsModel.remove({
         _id: request.params.comment_id
     }, function (error, comment) {
@@ -126,6 +136,7 @@ function deleteComment (request, response) {
 
 function voteArticle (request, response) {
     var query = request.query.vote;
+    let newVote;
     if (query === 'up') {
         newVote = {
             $inc: {votes: 1}

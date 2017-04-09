@@ -16,7 +16,7 @@ mongoose.connect(db, function (err) {
     console.log(`error connecting to the Database ${err}`);
   }
 });
-
+// can put all the middleware in a seperate file
 app.use(bodyParser.json());
 app.use('/api', apiRouter);
 
@@ -27,6 +27,11 @@ app.use('/*', function (request, response) {
 app.listen(PORT, function () {
   console.log(`listening on port ${PORT}`);
 });
+
+
+
+// can put all the error handlers in a seperate file
+
 
 app.use(function (error, request, response, next) {
   if (error.name === 'CastError') {
