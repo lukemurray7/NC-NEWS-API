@@ -134,26 +134,27 @@ function deleteComment (request, response) {
     });
 }
 
-function voteArticle (request, response) {
-    var query = request.query.vote;
-    let newVote;
-    if (query === 'up') {
+function voteArticle (request, response, next) {
+    let newVote = {};
+    if (request.query.vote === 'up') {
         newVote = {
             $inc: {votes: 1}
         };
     }
-    if (query === 'down') {
+    if (request.query.vote === 'down') {
         newVote = {
             $inc: {votes: -1}
         };
     }
-    articlesModel.update({
-        _id: request.params.article_id
-    }, newVote, function (error, article, next) {
+    articlesModel.findByIdAndUpdate(
+        {_id: request.params.article_id},
+        newVote,
+        {new: true},
+        (error, article) => {
         if (error) {
-            return response.status(500).send({error});
+            return next(error);
         }
-        response.status(200).send({updated: article});
+        response.status(201).send({article});
     });
 }
 
