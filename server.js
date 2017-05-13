@@ -19,11 +19,16 @@ mongoose.connect(db, function (err) {
 });
 // can put all the middleware in a seperate file
 
+app.set('view engine', 'ejs');
 
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/api', apiRouter);
+
+app.get('/', function (request, response) {
+  response.render('pages/index');
+});
 
 app.use('/*', function (request, response) {
   response.status(404).send({reason: 'ROUTE NOT FOUND'});
