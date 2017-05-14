@@ -6,7 +6,7 @@ Northcoders News API is a RESTful api which is build using Express.js, Node.js, 
 ## Getting Started
 
 
-Here is a link to the [API](https://secret-beach-88841.herokuapp.com/).
+Here is a link to the [API](https://serene-hollows-85752.herokuapp.com/).
 
 The front end of this project can be found [here](https://northcoders-news-12345.herokuapp.com/)
 
