@@ -1,20 +1,23 @@
-if (!process.env.NODE_ENV) process.env.NODE_ENV = 'dev';
+if (!process.env.NODE_ENV) process.env.NODE_ENV = 'production';
 
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var app = express();
 var config = require('./config');
-var db = 'mongodb://lukem:q1w2e3r4t5@ds157380.mlab.com:57380/nc_news_api';
+var db = config.DB[process.env.NODE_ENV];
 var PORT = config.PORT[process.env.NODE_ENV] || process.env.PORT;
 var apiRouter = require('./routes/api');
 var cors = require('cors');
+
 
 mongoose.connect(db, function (err) {
   if (!err) {
     console.log(`connected to the Database: ${db}`);
   } else {
-    console.log(`error connecting to the Database ${err}`);
+    console.log(db)
+    console.log(process.env.NODE_ENV)
+    console.log(`error connecting to the Database ${db} ${err}`);
   }
 });
 // can put all the middleware in a seperate file

@@ -112,7 +112,7 @@ function addComment (request, response) {
         created_by: 'northcoder',
         votes: 0,
     };
-    commentsModel.create([newComment], function (error, comment, next) {
+    commentsModel.create([newComment], function (error, comment) {
         if (error) {
             return response.status(500).send({error});
         }
@@ -130,7 +130,7 @@ function deleteComment (request, response) {
         if (error) {
             return response.status(500).send({error});
         }
-        response.status(200).send({remove: 'success'});
+        response.status(200).send({remove: comment});
     });
 }
 
@@ -160,6 +160,7 @@ function voteArticle (request, response, next) {
 
 function voteComment (request, response) {
     var query = request.query.vote;
+    let newVote;
     if (query === 'up') {
         newVote = {
             $inc: {votes: 1}
@@ -172,7 +173,7 @@ function voteComment (request, response) {
     }
     commentsModel.update({
         _id: request.params.comment_id
-    }, newVote, function (error, comment, next) {
+    }, newVote, function (error, comment) {
         if (error) {
             return response.status(500).send({error});
         }
