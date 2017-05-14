@@ -26,11 +26,12 @@ function saveUser (cb) {
   });
 }
 
+
 function saveTopics (cb) {
   models.Topics.create(topics, (err) => {
     if (err) cb(err);
     else cb();
-  })
+  });
 }
 
 function saveArticles (cb) {

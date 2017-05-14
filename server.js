@@ -15,8 +15,8 @@ mongoose.connect(db, function (err) {
   if (!err) {
     console.log(`connected to the Database: ${db}`);
   } else {
-    console.log(db)
-    console.log(process.env.NODE_ENV)
+    console.log(db);
+    console.log(process.env.NODE_ENV);
     console.log(`error connecting to the Database ${db} ${err}`);
   }
 });

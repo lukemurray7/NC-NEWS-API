@@ -21,6 +21,7 @@ describe('API ROUTES', () => {
     // Get some sample ids to use for future requests in the tests
     let sampleIds, invalidId, incorrectId;
 
+
     before(done => {
         mongoose.connection.once('connected', () => {
             mongoose.connection.db.dropDatabase();
@@ -133,7 +134,7 @@ describe('API ROUTES', () => {
     });
     describe('GET /api/articles/:invalid-id/comments', () => {
         it('should return the comments of an article', (done) => {
-            console.log(invalidId, incorrectId)
+            console.log(invalidId, incorrectId);
             request(ROOT) 
                 .get(`/articles/${invalidId}/comments`)
                 .end((error, response) => {
