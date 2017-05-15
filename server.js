@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 var app = express();
 var config = require('./config');
 var db = config.DB[process.env.NODE_ENV];
-var PORT = process.env.PORT || config.PORT[process.env.NODE_ENV];
+var PORT = process.env.PORT || config.PORT[process.env.NODE_ENV]
 var apiRouter = require('./routes/api');
 var cors = require('cors');
 
